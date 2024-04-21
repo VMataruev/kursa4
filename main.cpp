@@ -8,6 +8,8 @@
 
 using namespace std;
 
+
+// Создаем класс для пиццы
 class Pizza {
 public:
     string name;
@@ -27,14 +29,20 @@ Pizza pizzas[numPizzas] = {
 };
 
 
+
+// Главная функция
+// Главная функция
 int main() {
-    // Вывод всех пицц
+    setlocale(LC_ALL, "Russian");
 
-
+    // Инициализация переменных
     int numUser;
     string userName;
     ofstream users;
+    ofstream orders;
+    ofstream sales;
 
+    // Главная менюшка
     cout << "Добро пожаловать в нашу пиццерию!" << endl;
     cout << "-Ассортимент (1)" << endl;
     cout << "-Клиенты (2)" << endl;
@@ -43,9 +51,8 @@ int main() {
     cout << "-Оформить заказ (5)" << endl;
     cin >> numUser;
 
-    switch (numUser)
-    {
-    case 1:
+    // Действия после выбора пользователя
+    if (numUser == 1) {
         cout << "Доступное меню:" << endl;
         for (int i = 0; i < numPizzas; ++i) {
             cout << "Пицца " << i+1 << ":" << endl;
@@ -54,21 +61,18 @@ int main() {
             cout << "Цена: $" << pizzas[i].price << endl;
             cout << endl;
         }
-        break;
-    
-    case 2:
+    }
+    else if (numUser == 2) {
         /* code */
-        break;
-    
-    case 3:
+    }
+    else if (numUser == 3) {
         /* code */
-        break;
-
-    case 4:
+    }
+    else if (numUser == 4) {
         /* code */
-        break;
-
-    case 5:
+    }
+    else if (numUser == 5) {
+        // Вывод полного меню для заказа
         cout << "Доступное меню:" << endl;
         for (int i = 0; i < numPizzas; ++i) {
             cout << "Пицца " << i+1 << ":" << endl;
@@ -78,31 +82,50 @@ int main() {
             cout << endl;
         }
 
-        cout << "Введите Ваше имя" << endl;
+        cout << "Введите Ваше имя (используйте латиницу)" << endl;
         cin >> userName;
         
+        // Запись имени клиента в файл clients.txt
         users.open("clients.txt", std::ios::app);
-        if (users.is_open()) {
+        if (users.is_open()){
             users << userName << endl;
         }
         users.close();
 
-        cout << "Выберите пиццу (введите ее номер), которую хотите заказать" << endl;
-        int selectUser;
-        cin >> selectUser;
-        if (selectUser < 1 || selectUser > numPizzas) {
-            cout << "Вы ввели неверное число" << endl;
-        } 
-        else {
-            vector<int> cart;
-            cart.push_back(selectUser);
+        // Начало записи заказа клиента в orders.txt
+        orders.open("orders.txt", std::ios::app);
+        if (orders.is_open()) {
+            orders << "------------" << endl;
+            orders << "Имя:" << userName << endl;
         }
 
-        break;
-    
-    default:
+        // Выбор клиентом пиццы
+        char userWant = 'y'; // Используем символьный тип для ответа пользователя
+        while (userWant == 'y' || userWant == 'Y') { // Проверяем на 'y' или 'Y' для продолжения цикла
+            cout << "Выберите пиццу (введите ее номер), которую хотите заказать" << endl;
+            int selectUser;
+            cin >> selectUser;
+            if (selectUser < 1 || selectUser > numPizzas) {
+                cout << "Вы ввели неверное число" << endl;
+            } 
+            else {
+                vector<int> cart;
+                cart.push_back(selectUser);
+            }
+        
+            cout << "Хотите заказать еще? (y/n)" << endl;
+            cin >> userWant;
+        
+            // Добавляем проверку, чтобы выйти из цикла, если пользователь ввел 'n' или 'N'
+            if (userWant != 'y' && userWant != 'Y') {
+                break;
+            }
+        }
+
+        orders.close();
+    }
+    else {
         cout << "Пожалуйста, выберите вариант меню (1-4)" << endl;
-        break;
     }
 
     return 0;
