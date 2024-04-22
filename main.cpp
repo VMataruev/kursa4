@@ -9,6 +9,11 @@
 using namespace std;
 
 
+
+
+
+
+
 // Создаем класс для пиццы
 class Pizza {
 public:
@@ -20,17 +25,39 @@ public:
     Pizza(string t, int s, double p) : name(t), size(s), price(p) {}
 };
 
+
+
+
+
+
+
+
+
 // Глобальный массив объектов Pizza
-const int numPizzas = 3;
+const int numPizzas = 5;
 Pizza pizzas[numPizzas] = {
-    Pizza("Пеперонни", 12, 9.99),
-    Pizza("Маргаритта", 10, 8.99),
-    Pizza("Вегатерианская", 14, 10.99)
+    Pizza("Пеперонни", 12, 800),
+    Pizza("Маргаритта", 10, 900),
+    Pizza("Вегатерианская", 14, 1100),
+    Pizza("Мясная", 12, 1200),
+    Pizza("Карбонара", 10, 900)
 };
 
 
 
-// Главная функция
+
+
+
+
+
+// Объявление функций, чтобы их можно было вызывать из main()
+void order(vector<string>& cart);
+void menu();
+
+
+
+
+
 // Главная функция
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -52,81 +79,147 @@ int main() {
     cin >> numUser;
 
     // Действия после выбора пользователя
+    // Ассортимент
     if (numUser == 1) {
-        cout << "Доступное меню:" << endl;
-        for (int i = 0; i < numPizzas; ++i) {
-            cout << "Пицца " << i+1 << ":" << endl;
-            cout << "Наименование: " << pizzas[i].name << endl;
-            cout << "Размер: " << pizzas[i].size << " inches" << endl;
-            cout << "Цена: $" << pizzas[i].price << endl;
-            cout << endl;
-        }
+        menu();
     }
+
+    // Клиенты
     else if (numUser == 2) {
         /* code */
     }
+
+    // Заказы
     else if (numUser == 3) {
         /* code */
     }
+    
+    // Скидки
     else if (numUser == 4) {
         /* code */
     }
+    
+    // Оформить заказ
     else if (numUser == 5) {
-        // Вывод полного меню для заказа
-        cout << "Доступное меню:" << endl;
-        for (int i = 0; i < numPizzas; ++i) {
-            cout << "Пицца " << i+1 << ":" << endl;
-            cout << "Наименование: " << pizzas[i].name << endl;
-            cout << "Размер: " << pizzas[i].size << " inches" << endl;
-            cout << "Цена: $" << pizzas[i].price << endl;
-            cout << endl;
-        }
-
-        cout << "Введите Ваше имя (используйте латиницу)" << endl;
-        cin >> userName;
-        
-        // Запись имени клиента в файл clients.txt
-        users.open("clients.txt", std::ios::app);
-        if (users.is_open()){
-            users << userName << endl;
-        }
-        users.close();
-
-        // Начало записи заказа клиента в orders.txt
-        orders.open("orders.txt", std::ios::app);
-        if (orders.is_open()) {
-            orders << "------------" << endl;
-            orders << "Имя:" << userName << endl;
-        }
-
-        // Выбор клиентом пиццы
-        char userWant = 'y'; // Используем символьный тип для ответа пользователя
-        while (userWant == 'y' || userWant == 'Y') { // Проверяем на 'y' или 'Y' для продолжения цикла
-            cout << "Выберите пиццу (введите ее номер), которую хотите заказать" << endl;
-            int selectUser;
-            cin >> selectUser;
-            if (selectUser < 1 || selectUser > numPizzas) {
-                cout << "Вы ввели неверное число" << endl;
-            } 
-            else {
-                vector<int> cart;
-                cart.push_back(selectUser);
-            }
-        
-            cout << "Хотите заказать еще? (y/n)" << endl;
-            cin >> userWant;
-        
-            // Добавляем проверку, чтобы выйти из цикла, если пользователь ввел 'n' или 'N'
-            if (userWant != 'y' && userWant != 'Y') {
-                break;
-            }
-        }
-
-        orders.close();
-    }
-    else {
-        cout << "Пожалуйста, выберите вариант меню (1-4)" << endl;
+        vector<string> cart; // Создаем вектор для хранения заказанных пицц
+        order(cart); // Передаем вектор по ссылке для сохранения заказов
+    } else {
+        cout << "Пожалуйста, выберите вариант меню (1-5)" << endl;
     }
 
     return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Определение функции menu()
+void menu() {
+    cout << "Доступное меню:" << endl;
+    for (int i = 0; i < numPizzas; ++i) {
+        cout << "Пицца " << i + 1 << ":" << endl;
+        cout << "Наименование: " << pizzas[i].name << endl;
+        cout << "Размер: " << pizzas[i].size << " см" << endl;
+        cout << "Цена: " << pizzas[i].price << "₽" << endl;
+        cout << endl;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Определение функции order()
+void order(vector<string>& cart) { // Принимаем вектор по ссылке для сохранения заказов
+    string userName;
+    ofstream users;
+    ofstream orders;
+    int price = 0;
+
+    menu(); // Показываем меню пицц
+
+    cout << "Введите Ваше имя (используйте латиницу)" << endl;
+    cin >> userName;
+    
+    // Запись имени клиента в файл clients.txt
+    users.open("clients.txt", std::ios::app);
+    if (users.is_open()) {
+        users << userName << endl;
+    }
+    users.close();
+
+    // Начало записи заказа клиента в orders.txt
+    orders.open("orders.txt", std::ios::app);
+    if (orders.is_open()) {
+        orders << "------------------" << endl;
+        orders << "Имя: " << userName << endl;
+    }
+
+    // Выбор клиентом пиццы
+    char userWant = 'y'; // Используем символьный тип для ответа пользователя
+    while (userWant == 'y' || userWant == 'Y') { // Проверяем на 'y' или 'Y' для продолжения цикла
+        cout << "Выберите пиццу (введите ее номер), которую хотите заказать" << endl;
+        int selectUser;
+        cin >> selectUser;
+        if (selectUser < 1 || selectUser > numPizzas) {
+            cout << "Вы ввели неверное число" << endl;
+        } else {
+            cart.push_back(pizzas[selectUser - 1].name); // Добавляем название выбранной пиццы в корзину
+            price += pizzas[selectUser - 1].price;
+        }
+    
+        cout << "Хотите заказать еще? (y/n)" << endl;
+        cin >> userWant;
+    
+        // Добавляем проверку, чтобы выйти из цикла, если пользователь ввел 'n' или 'N'
+        if (userWant != 'y' && userWant != 'Y') {
+            // Выводим список заказанных пицц в файл заказов
+            for (const auto& pizza : cart) {
+                orders << "Пицца: " << pizza << endl;
+            }
+            break;
+        }
+    }
+    orders << "Цена заказа: " << price << "₽" << endl;
+    cout << "У Вас есть купон на скидку? (y/n)" << endl;
+    char userSale;
+    cin >> userSale;
+    if (userSale == 'y' || userSale == 'Y') {
+        price -= price*20/100;
+        orders << "Цена заказа со скидкой: " << price << "₽" << endl;
+    }
+    else {
+        orders << "Цена заказа: " << price << "₽" << endl;
+    }
+    orders << "------------------" << "\n" << endl;
+    orders.close();
 }
