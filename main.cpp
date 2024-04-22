@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -53,6 +55,8 @@ Pizza pizzas[numPizzas] = {
 // Объявление функций, чтобы их можно было вызывать из main()
 void order(vector<string>& cart);
 void menu();
+string func_sales();
+string getCouponDiscount(const string& coupon);
 
 
 
@@ -86,7 +90,7 @@ int main() {
 
     // Клиенты
     else if (numUser == 2) {
-        /* code */
+        func_sales();
     }
 
     // Заказы
@@ -171,20 +175,20 @@ void order(vector<string>& cart) { // Принимаем вектор по сс�
     cin >> userName;
     
     // Запись имени клиента в файл clients.txt
-    users.open("clients.txt", std::ios::app);
+    users.open("clients.txt", ios::app);
     if (users.is_open()) {
         users << userName << endl;
     }
     users.close();
 
     // Начало записи заказа клиента в orders.txt
-    orders.open("orders.txt", std::ios::app);
+    orders.open("orders.txt", ios::app);
     if (orders.is_open()) {
         orders << "------------------" << endl;
         orders << "Имя: " << userName << endl;
     }
 
-    // Выбор клиентом пиццы
+    // Заказ пиццы
     char userWant = 'y'; // Используем символьный тип для ответа пользователя
     while (userWant == 'y' || userWant == 'Y') { // Проверяем на 'y' или 'Y' для продолжения цикла
         cout << "Выберите пиццу (введите ее номер), которую хотите заказать" << endl;
@@ -210,16 +214,90 @@ void order(vector<string>& cart) { // Принимаем вектор по сс�
         }
     }
     orders << "Цена заказа: " << price << "₽" << endl;
+
+    // Проверка наличия купона у покупателя
     cout << "У Вас есть купон на скидку? (y/n)" << endl;
     char userSale;
     cin >> userSale;
     if (userSale == 'y' || userSale == 'Y') {
+        // Запрос купона у пользователя
+        cout << "Enter coupon: ";
+        string userCoupon;
+        cin >> userCoupon;
+
+        // Получение и вывод скидки по купону
+        string userDiscount = getCouponDiscount(userCoupon);
+        cout << userDiscount << endl;
+
+
         price -= price*20/100;
         orders << "Цена заказа со скидкой: " << price << "₽" << endl;
     }
-    else {
-        orders << "Цена заказа: " << price << "₽" << endl;
-    }
+
+
+    // Заканчиваем запись заказа клиента и закрываем файл
     orders << "------------------" << "\n" << endl;
     orders.close();
+}
+
+
+
+
+
+
+
+
+// string func_sales(const string& coupon)
+// {
+//     ifstream file("sales.txt"); // Открытие файла с купонами и скидками для чтения
+//     map<string, string> coupons; // Контейнер для хранения купонов и скидок
+
+//     if (!file.is_open()) {
+//         cerr << "Failed to open the file." << endl;
+//         return "Error: Failed to open the file.";
+//     }
+
+//     // Чтение купонов и скидок из файла
+//     string fileCoupon, discount;
+//     while (file >> fileCoupon >> discount) {
+//         coupons[fileCoupon] = discount;
+//     }
+
+//     file.close(); // Закрытие файла
+
+//     // Поиск скидки по купону
+//     auto it = coupons.find(coupon);
+//     if (it != coupons.end()) {
+//         return it->second;
+//     } else {
+//         return "Coupon not found.";
+//     }
+// }
+ 
+
+
+string getCouponDiscount(const string& coupon) {
+    ifstream file("sales.txt"); // Открытие файла с купонами и скидками для чтения
+    map<string, string> coupons; // Контейнер для хранения купонов и скидок
+
+    if (!file.is_open()) {
+        cerr << "Failed to open the file." << endl;
+        return "Error: Failed to open the file.";
+    }
+
+    // Чтение купонов и скидок из файла
+    string fileCoupon, discount;
+    while (file >> fileCoupon >> discount) {
+        coupons[fileCoupon] = discount;
+    }
+
+    file.close(); // Закрытие файла
+
+    // Поиск скидки по купону
+    auto it = coupons.find(coupon);
+    if (it != coupons.end()) {
+        return it->second;
+    } else {
+        return "Coupon not found.";
+    }
 }
