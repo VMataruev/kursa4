@@ -55,6 +55,7 @@ Pizza pizzas[numPizzas] = {
 void order(vector<string>& cart);
 void menu();
 string getCouponDiscount(const string& coupon);
+void read_file(string cin_file);
 
 
 
@@ -88,17 +89,17 @@ int main() {
 
     // Клиенты
     else if (numUser == 2) {
-
+        read_file("clients.txt");
     }
 
     // Заказы
     else if (numUser == 3) {
-        /* code */
+        read_file("orders.txt");
     }
     
     // Скидки
     else if (numUser == 4) {
-        /* code */
+        read_file("sales.txt");
     }
     
     // Оформить заказ
@@ -121,6 +122,28 @@ int main() {
 
 
 
+
+
+
+
+
+
+
+
+void read_file(string cin_file) {
+    ifstream file(cin_file); // Открытие файла для чтения
+    string line;
+
+    if (file.is_open()) {
+        // Чтение файла построчно и вывод содержимого на экран
+        while (getline(file, line)) {
+            cout << line << endl;
+        }
+        file.close(); // Закрытие файла после использования
+    } else {
+        cerr << "Невозможно открыть файл" << endl;
+    }
+}
 
 
 
@@ -163,36 +186,20 @@ void menu() {
 // Определение функции order()
 void order(vector<string>& cart) { // Принимаем вектор по ссылке для сохранения заказов
     string userName;
-    ofstream users;
+    ofstream users; // Заменяем ofstream на ifstream
     ofstream orders;
     int price = 0;
-
+    
     menu(); // Показываем меню пицц
-
+    
     cout << "Введите Ваше имя (используйте латиницу)" << endl;
     cin >> userName;
     
     // Запись имени клиента в файл clients.txt
     users.open("clients.txt", ios::app);
     if (users.is_open()) {
-        string valueToFind = userName;
-        string value;
-        bool found = false;
-
-        while (users >> value) 
-        { // Читаем значения из файла по одному
-            if (value == valueToFind) 
-            { // Проверяем, совпадает ли с нужным значением
-                found = true;
-                break; // Если нашли, выходим из цикла
-            }
-            else 
-            {
-                users << userName << endl;
-            }
-        }
-    }
-    users.close();
+        users << userName << endl;
+    }    
 
     // Начало записи заказа клиента в orders.txt
     orders.open("orders.txt", ios::app);
@@ -254,6 +261,8 @@ void order(vector<string>& cart) { // Принимаем вектор по сс�
  
 
 
+
+
 string getCouponDiscount(const string& coupon) {
     ifstream file("sales.txt"); // Открытие файла с купонами и скидками для чтения
     map<string, string> coupons; // Контейнер для хранения купонов и скидок
@@ -279,3 +288,8 @@ string getCouponDiscount(const string& coupon) {
         return "Купон не найден.";
     }
 }
+
+
+
+
+
