@@ -94,6 +94,11 @@ int start() {
     ofstream orders;
     ofstream sales;
 
+    int i;
+    for (i = 0; i < 10; i++) {
+        cout << "\n" << endl;
+    }
+
     // Главная менюшка
     cout << "Добро пожаловать в нашу пиццерию!" << endl;
     cout << "1 - Ассортимент" << endl;
