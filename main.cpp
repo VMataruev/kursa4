@@ -56,6 +56,8 @@ void order(vector<string>& cart);
 void menu();
 string getCouponDiscount(const string& coupon);
 void read_file(string cin_file);
+int start();
+void repeat();
 
 
 
@@ -64,51 +66,7 @@ void read_file(string cin_file);
 // Главная функция
 int main() {
     setlocale(LC_ALL, "Russian");
-
-    // Инициализация переменных
-    int numUser;
-    string userName;
-    ofstream users;
-    ofstream orders;
-    ofstream sales;
-
-    // Главная менюшка
-    cout << "Добро пожаловать в нашу пиццерию!" << endl;
-    cout << "-Ассортимент (1)" << endl;
-    cout << "-Клиенты (2)" << endl;
-    cout << "-Заказы (3)" << endl;
-    cout << "-Скидки (4)" << endl;
-    cout << "-Оформить заказ (5)" << endl;
-    cin >> numUser;
-
-    // Действия после выбора пользователя
-    // Ассортимент
-    if (numUser == 1) {
-        menu();
-    }
-
-    // Клиенты
-    else if (numUser == 2) {
-        read_file("clients.txt");
-    }
-
-    // Заказы
-    else if (numUser == 3) {
-        read_file("orders.txt");
-    }
-    
-    // Скидки
-    else if (numUser == 4) {
-        read_file("sales.txt");
-    }
-    
-    // Оформить заказ
-    else if (numUser == 5) {
-        vector<string> cart; // Создаем вектор для хранения заказанных пицц
-        order(cart); // Передаем вектор по ссылке для сохранения заказов
-    } else {
-        cout << "Пожалуйста, выберите вариант меню (1-5)" << endl;
-    }
+    start();
 
     return 0;
 }
@@ -126,6 +84,86 @@ int main() {
 
 
 
+
+// Основное меню выбора
+
+int start() {
+    int numUser;
+    string userName;
+    ofstream users;
+    ofstream orders;
+    ofstream sales;
+
+    // Главная менюшка
+    cout << "Добро пожаловать в нашу пиццерию!" << endl;
+    cout << "1 - Ассортимент" << endl;
+    cout << "2 - Клиенты" << endl;
+    cout << "3 - Заказы" << endl;
+    cout << "4 - Скидки" << endl;
+    cout << "5 - Оформить заказ" << endl;
+    cout << "6 - Выйти" << endl;
+    cin >> numUser;
+
+    // Действия после выбора пользователя
+    // Ассортимент
+    if (numUser == 1) {
+        menu();
+        repeat();
+    }
+
+    // Клиенты
+    else if (numUser == 2) {
+        read_file("clients.txt");
+        repeat();
+    }
+
+    // Заказы
+    else if (numUser == 3) {
+        read_file("orders.txt");
+        repeat();
+    }
+    
+    // Скидки
+    else if (numUser == 4) {
+        read_file("sales.txt");
+        repeat();
+    }
+    
+    // Оформить заказ
+    else if (numUser == 5) {
+        vector<string> cart; // Создаем вектор для хранения заказанных пицц
+        order(cart); // Передаем вектор по ссылке для сохранения заказов
+        repeat();
+    } 
+    
+    else if (numUser == 6) {
+        cout << "Завершение процесса";
+    }
+
+    else {
+        cout << "Пожалуйста, выберите вариант меню (1-6)" << endl;
+    }
+
+    return 0;
+}
+
+
+// Функция для перехода в главное меню по желанию пользователя
+void repeat() {
+    cout << "Вернуться в меню? (Y/N)" << endl;
+        char Yes_No = 'y';
+        cin >> Yes_No;
+        if (Yes_No == 'Y' || Yes_No == 'y') {
+            cout << "\n" << endl;
+            start();
+        }
+        else if (Yes_No == 'n' || Yes_No == 'N') {
+            cout << "Завершение процесса";
+        }
+        else {
+            repeat();
+        }
+}
 
 
 
@@ -160,7 +198,7 @@ void read_file(string cin_file) {
 
 // Определение функции menu()
 void menu() {
-    cout << "Доступное меню:" << endl;
+    cout << "Доступное меню:" << "\n" << endl;
     for (int i = 0; i < numPizzas; ++i) {
         cout << "Пицца " << i + 1 << ":" << endl;
         cout << "Наименование: " << pizzas[i].name << endl;
