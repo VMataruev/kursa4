@@ -109,44 +109,47 @@ int start() {
     cout << "6 - Выйти" << endl;
     cin >> numUser;
 
-    // Действия после выбора пользователя
-    // Ассортимент
-    if (numUser == 1) {
-        menu();
-        repeat();
-    }
+    while (numUser < 1 || numUser > 6) {
+        // Действия после выбора пользователя
+        // Ассортимент
+        if (numUser == 1) {
+            menu();
+            repeat();
+        }
 
-    // Клиенты
-    else if (numUser == 2) {
-        read_file("clients.txt");
-        repeat();
-    }
+        // Клиенты
+        else if (numUser == 2) {
+            read_file("clients.txt");
+            repeat();
+        }
 
-    // Заказы
-    else if (numUser == 3) {
-        read_file("orders.txt");
-        repeat();
-    }
-    
-    // Скидки
-    else if (numUser == 4) {
-        read_file("sales.txt");
-        repeat();
-    }
-    
-    // Оформить заказ
-    else if (numUser == 5) {
-        vector<string> cart; // Создаем вектор для хранения заказанных пицц
-        order(cart); // Передаем вектор по ссылке для сохранения заказов
-        repeat();
-    } 
-    
-    else if (numUser == 6) {
-        cout << "Завершение процесса";
-    }
+        // Заказы
+        else if (numUser == 3) {
+            read_file("orders.txt");
+            repeat();
+        }
+        
+        // Скидки
+        else if (numUser == 4) {
+            read_file("sales.txt");
+            repeat();
+        }
+        
+        // Оформить заказ
+        else if (numUser == 5) {
+            vector<string> cart; // Создаем вектор для хранения заказанных пицц
+            order(cart); // Передаем вектор по ссылке для сохранения заказов
+            repeat();
+        } 
+        
+        else if (numUser == 6) {
+            cout << "Завершение процесса";
+        }
 
-    else {
-        cout << "Пожалуйста, выберите вариант меню (1-6)" << endl;
+        else {
+            cout << "Пожалуйста, выберите вариант меню (1-6)" << endl;
+            start();
+        }
     }
 
     return 0;
