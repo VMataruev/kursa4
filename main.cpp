@@ -88,16 +88,17 @@ int main() {
 // Основное меню выбора
 
 int start() {
-    int numUser;
     string userName;
     ofstream users;
     ofstream orders;
     ofstream sales;
 
-    int i;
-    for (i = 0; i < 50; i++) {
-        cout << "\n" << endl;
-    }
+    // int i;
+    // for (i = 0; i < 50; i++) {
+    //     cout << "\n" << endl;
+    // }
+
+    cout << "\033[2J\033[1;1H";
 
     // Главная менюшка
     cout << "Добро пожаловать в нашу пиццерию!" << endl;
@@ -107,47 +108,51 @@ int start() {
     cout << "4 - Скидки" << endl;
     cout << "5 - Оформить заказ" << endl;
     cout << "6 - Выйти" << endl;
-    cin >> numUser;
+
+    unsigned long long numUser;
+ 
+    while (!(cin >> numUser) || (cin.peek() != '\n')) {
+        cin.clear();
+        while (cin.get() != '\n');
+        cout << "Вы ввели неверное чесло, выберите вариант от 1 до 6: ";
+    }
 
     // Действия после выбора пользователя
     // Ассортимент
     if (numUser == 1) {
-        menu();
-        repeat();
+    menu();
+    repeat();
     }
-
     // Клиенты
     else if (numUser == 2) {
         read_file("clients.txt");
         repeat();
     }
-
     // Заказы
     else if (numUser == 3) {
         read_file("orders.txt");
         repeat();
     }
-    
     // Скидки
     else if (numUser == 4) {
         read_file("sales.txt");
         repeat();
     }
-    
     // Оформить заказ
     else if (numUser == 5) {
         vector<string> cart; // Создаем вектор для хранения заказанных пицц
         order(cart); // Передаем вектор по ссылке для сохранения заказов
         repeat();
     } 
-    
     else if (numUser == 6) {
         cout << "Завершение процесса";
     }
 
     else {
-        cout << "Пожалуйста, выберите вариант меню (1-6)" << endl;
+        cout << "В меню разрешено вводить только варианты от 1 до 6" << endl;
+        start();
     }
+    
 
     return 0;
 }
@@ -160,24 +165,23 @@ int start() {
 
 
 
-
-
 // Функция для перехода в главное меню по желанию пользователя
 void repeat() {
     cout << "Вернуться в меню? (Y/N)" << endl;
-        char Yes_No = 'y';
-        cin >> Yes_No;
-        if (Yes_No == 'Y' || Yes_No == 'y') {
-            cout << "\n" << endl;
-            start();
-        }
-        else if (Yes_No == 'n' || Yes_No == 'N') {
-            cout << "Завершение процесса";
-        }
-        else {
-            repeat();
-        }
+    char Yes_No = 'y';
+    cin >> Yes_No;
+    if (Yes_No == 'Y' || Yes_No == 'y') {
+        cout << "\n" << endl;
+        start();
+    }
+    else if (Yes_No == 'n' || Yes_No == 'N') {
+        cout << "Завершение процесса";
+    }
+    else {
+        repeat();
+    }
 }
+
 
 
 

@@ -94,10 +94,12 @@ int start() {
     ofstream orders;
     ofstream sales;
 
-    int i;
-    for (i = 0; i < 50; i++) {
-        cout << "\n" << endl;
-    }
+    // int i;
+    // for (i = 0; i < 50; i++) {
+    //     cout << "\n" << endl;
+    // }
+
+    cout << "\033[2J\033[1;1H";
 
     // Главная менюшка
     cout << "Добро пожаловать в нашу пиццерию!" << endl;
@@ -146,7 +148,7 @@ int start() {
     }
 
     else {
-        cout << "Пожалуйста, выберите вариант меню (1-6)" << endl;
+        cout << "Вы вышли за пределы, пожалуйста, выберите пункт меню 1-6" << endl;
     }
 
     return 0;
@@ -172,6 +174,7 @@ void repeat() {
             start();
         }
         else if (Yes_No == 'n' || Yes_No == 'N') {
+            cout << "\033[2J\033[1;1H";
             cout << "Завершение процесса";
         }
         else {
